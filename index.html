@@ -7,7 +7,7 @@
 <meta name="description" content="How AttaID connects to CamDX and builds the CamDigiKey integration — the plan and the decisions needed.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300..700&display=swap">
 <link rel="stylesheet" href="deck.css">
 </head>
 <body>
@@ -20,20 +20,55 @@
     <p class="kicker">AttaID &middot; <b>ATTA-KH</b></p>
     <h1 class="h1">Keycloak,<br>but for Cambodia.</h1>
     <div class="rule"></div>
-    <p class="lead">One identity across all our applications — and the only Cambodian
-      identity layer that speaks to the government's own systems.</p>
-    <p class="sub">CamDX &middot; CamDigiKey &middot; Delivery plan</p>
+    <p class="lead">One identity across all our applications — built for how Cambodians actually
+      sign in, and bridged to the government's own systems.</p>
+    <p class="sub">Telegram &middot; Facebook &middot; Phone &middot; CamDigiKey</p>
   </section>
 
-  <!-- 2 ─────────────────────────────── THE POSITION -->
+  <!-- 2 ─────────────────────────────── WHO SIGNS IN -->
   <section class="slide" aria-label="Slide 2">
-    <p class="kicker">01 &middot; Where the value actually is</p>
+    <p class="kicker">01 &middot; Who signs in, and how</p>
+    <h2 class="h2">No new account. No new password.</h2>
+    <div class="grid4">
+      <article class="card" data-tone="steel">
+        <p class="card__tag">Social</p>
+        <p class="h3">Telegram</p>
+        <p class="small">Widely used across Cambodia for everyday messaging, and already a provider seam in our codebase.</p>
+      </article>
+      <article class="card" data-tone="steel">
+        <p class="card__tag">Social</p>
+        <p class="h3">Facebook</p>
+        <p class="small">The account many citizens have when they have no email address at all.</p>
+      </article>
+      <article class="card" data-tone="patina">
+        <p class="card__tag">Phone</p>
+        <p class="h3">SMS code</p>
+        <p class="small">For the farmer with a phone and no email. A code by text, no password to remember.</p>
+      </article>
+      <article class="card" data-tone="brass">
+        <p class="card__tag">Existing</p>
+        <p class="h3">Farms Nexus &middot; CashEW</p>
+        <p class="small">Accounts people already hold. They keep their history and never re-register.</p>
+      </article>
+    </div>
+    <div class="callout" data-tone="brass">
+      <p class="h3">Every one of these is a door into the same identity.</p>
+      <p class="body">A farmer taps “Log in with Telegram” and is in. Verified, government-grade identity
+        through CamDigiKey comes later — only when an app actually needs it. The plan's job is to make
+        sure four doors lead to one person, not four.</p>
+    </div>
+  </section>
+
+  <!-- 3 ─────────────────────────────── THE POSITION -->
+  <section class="slide" aria-label="Slide 3">
+    <p class="kicker">02 &middot; Where the value actually is</p>
     <h2 class="h2">A translated login page is not a business.</h2>
     <div class="split">
       <div class="rail-col" data-tone="brass">
         <p class="rail-col__tag">What anyone can copy</p>
-        <p class="body">Keycloak already speaks Khmer. Theming and translation get a competitor a
-          localised login screen in a week. Sign-in, sessions, password resets — all commodity.</p>
+        <p class="body">Keycloak ships forty languages and Khmer is not one of them — but that gap is a
+          translation file, not a moat. Any competitor closes it in a week. Sign-in, sessions,
+          password resets: all commodity.</p>
       </div>
       <div class="rail-col" data-tone="patina">
         <p class="rail-col__tag">What they cannot</p>
@@ -48,16 +83,16 @@
     </div>
   </section>
 
-  <!-- 3 ─────────────────────────────── THE LANDSCAPE -->
-  <section class="slide" aria-label="Slide 3">
-    <p class="kicker">02 &middot; The four government systems that matter</p>
+  <!-- 4 ─────────────────────────────── THE LANDSCAPE -->
+  <section class="slide" aria-label="Slide 4">
+    <p class="kicker">03 &middot; The government systems that matter</p>
     <h2 class="h2">We integrate with them. We never impersonate them.</h2>
     <div class="grid4">
       <article class="card" data-tone="brass">
         <p class="card__tag">Transport</p>
         <p class="h3">CamDX</p>
         <p class="small">The national data exchange, built on Estonia's X-Road. Every government
-          integration travels through it. We must become a member.</p>
+          integration runs over it. We must become a member.</p>
       </article>
       <article class="card" data-tone="steel">
         <p class="card__tag">Identity</p>
@@ -80,49 +115,61 @@
     </div>
   </section>
 
-  <!-- 4 ─────────────────────────────── HOW CAMDX WORKS -->
-  <section class="slide" aria-label="Slide 4">
-    <p class="kicker">03 &middot; How CamDX works</p>
-    <h2 class="h2">Every member runs its own gateway. Even CamDX cannot read the traffic.</h2>
+  <!-- 5 ─────────────────────────────── HOW CAMDX WORKS -->
+  <section class="slide" aria-label="Slide 5">
+    <p class="kicker">04 &middot; How CamDX works</p>
+    <h2 class="h2">Every member runs its own gateway. Nothing passes through the middle.</h2>
 
-    <svg class="diagram" viewBox="0 0 900 200" role="img"
-         aria-label="AttaID connects to its own Security Server, which exchanges signed and encrypted messages across the CamDX network with the government's Security Server, which fronts CamDigiKey.">
-      <rect class="dg-box dg-box--steel" x="4" y="62" width="150" height="66" rx="3"/>
-      <text class="dg-name" x="79" y="90" text-anchor="middle">AttaID</text>
-      <text class="dg-sub"  x="79" y="108" text-anchor="middle">our platform</text>
+    <svg class="diagram" viewBox="0 0 900 250" role="img"
+         aria-label="AttaID talks to its own Security Server, which connects directly to the government's Security Server over mutually authenticated TLS, which fronts CamDigiKey. The CamDX Central Server sits above, publishing the member registry and trust anchors, and is never in the data path.">
 
-      <path class="dg-line" d="M158 95 H214"/>
-      <path class="dg-line" d="M206 89 l8 6 -8 6"/>
+      <rect class="dg-box" x="336" y="4" width="232" height="52" rx="3" style="stroke-dasharray:4 3"/>
+      <text class="dg-name" x="452" y="26" text-anchor="middle">CamDX Central Server</text>
+      <text class="dg-sub"  x="452" y="44" text-anchor="middle">member registry · trust anchors</text>
 
-      <rect class="dg-box dg-box--brass" x="218" y="52" width="168" height="86" rx="3"/>
-      <text class="dg-name" x="302" y="80" text-anchor="middle">Our Security Server</text>
-      <text class="dg-sub"  x="302" y="98" text-anchor="middle">signs · encrypts</text>
-      <text class="dg-sub"  x="302" y="114" text-anchor="middle">holds our member keys</text>
+      <path class="dg-line" d="M400 58 V88 H302 V108" style="stroke-dasharray:3 3"/>
+      <path class="dg-line" d="M504 58 V88 H602 V108" style="stroke-dasharray:3 3"/>
+      <text class="dg-label" x="452" y="80" text-anchor="middle">tells each end who to trust — never sees the message</text>
 
-      <path class="dg-line dg-line--live" d="M390 95 H514"/>
-      <text class="dg-label" x="452" y="80" text-anchor="middle" style="fill:var(--brass)">CamDX</text>
-      <text class="dg-label" x="452" y="176" text-anchor="middle">the payload stays sealed end to end — CamDX carries it but cannot read it</text>
+      <rect class="dg-box dg-box--steel" x="4" y="120" width="150" height="66" rx="3"/>
+      <text class="dg-name" x="79" y="148" text-anchor="middle">AttaID</text>
+      <text class="dg-sub"  x="79" y="166" text-anchor="middle">our platform</text>
 
-      <rect class="dg-box dg-box--brass" x="518" y="52" width="168" height="86" rx="3"/>
-      <text class="dg-name" x="602" y="80" text-anchor="middle">Their Security Server</text>
-      <text class="dg-sub"  x="602" y="98" text-anchor="middle">verifies · decrypts</text>
+      <path class="dg-line" d="M158 153 H214"/>
+      <path class="dg-line" d="M206 147 l8 6 -8 6"/>
 
-      <path class="dg-line" d="M690 95 H746"/>
-      <path class="dg-line" d="M738 89 l8 6 -8 6"/>
+      <rect class="dg-box dg-box--brass" x="218" y="110" width="168" height="86" rx="3"/>
+      <text class="dg-name" x="302" y="138" text-anchor="middle">Our Security Server</text>
+      <text class="dg-sub"  x="302" y="156" text-anchor="middle">signs · encrypts</text>
+      <text class="dg-sub"  x="302" y="172" text-anchor="middle">holds our member keys</text>
 
-      <rect class="dg-box dg-box--steel" x="750" y="62" width="146" height="66" rx="3"/>
-      <text class="dg-name" x="823" y="90" text-anchor="middle">CamDigiKey</text>
-      <text class="dg-sub"  x="823" y="108" text-anchor="middle">eKYC · auth</text>
+      <path class="dg-line dg-line--live" d="M390 153 H514"/>
+      <path class="dg-line dg-line--live" d="M506 147 l8 6 -8 6"/>
+      <path class="dg-line dg-line--live" d="M398 147 l-8 6 8 6"/>
+      <text class="dg-label" x="452" y="142" text-anchor="middle" style="fill:var(--brass)">mutual TLS</text>
+
+      <rect class="dg-box dg-box--brass" x="518" y="110" width="168" height="86" rx="3"/>
+      <text class="dg-name" x="602" y="138" text-anchor="middle">Their Security Server</text>
+      <text class="dg-sub"  x="602" y="156" text-anchor="middle">verifies · decrypts</text>
+
+      <path class="dg-line" d="M690 153 H746"/>
+      <path class="dg-line" d="M738 147 l8 6 -8 6"/>
+
+      <rect class="dg-box dg-box--steel" x="750" y="120" width="146" height="66" rx="3"/>
+      <text class="dg-name" x="823" y="148" text-anchor="middle">CamDigiKey</text>
+      <text class="dg-sub"  x="823" y="166" text-anchor="middle">eKYC · auth</text>
+
+      <text class="dg-label" x="452" y="228" text-anchor="middle">signed, timestamped, and sent straight to the other end — there is no intermediary</text>
     </svg>
 
-    <p class="body">A Security Server is a dedicated, hardened machine that signs and encrypts every
-      exchange. It is our end of the government pipe, it holds the keys that prove we are us, and
-      operating one is a condition of membership — not an optional extra.</p>
+    <p class="body">X-Road is decentralised: our Security Server connects <b class="text-1">straight to
+      theirs</b>. The Central Server only publishes who is a member and whose certificates are valid —
+      it never carries a request, and never sees one.</p>
   </section>
 
-  <!-- 5 ─────────────────────────────── JOINING CAMDX -->
-  <section class="slide" aria-label="Slide 5">
-    <p class="kicker">04 &middot; Joining CamDX</p>
+  <!-- 6 ─────────────────────────────── JOINING CAMDX -->
+  <section class="slide" aria-label="Slide 6">
+    <p class="kicker">05 &middot; Joining CamDX</p>
     <h2 class="h2">They issue our identity. We build everything around it.</h2>
     <div class="split split--wide">
       <div class="rail-col" data-tone="brass">
@@ -146,16 +193,16 @@
     </div>
     <div class="callout">
       <p class="h3">The one question we must ask this week</p>
-      <p class="body">Members today are mostly ministries and banks. <b class="text-1">Which member
-        class would we fall into?</b> If the answer is a queue, we wait and keep building. If it is
-        an eligibility bar, we need a government sponsor — and that changes the company's plan, not
-        just the project's.</p>
+      <p class="body">We do not know whether a private company qualifies at all. <b class="text-1">Which
+        member class would we fall into?</b> If the answer is a queue, we wait and keep building. If
+        it is an eligibility bar, we need a government sponsor — and that changes the company's plan,
+        not just the project's.</p>
     </div>
   </section>
 
-  <!-- 6 ─────────────────────────────── THE SECURITY SERVER -->
-  <section class="slide" aria-label="Slide 6">
-    <p class="kicker">05 &middot; What running the gateway means</p>
+  <!-- 7 ─────────────────────────────── THE SECURITY SERVER -->
+  <section class="slide" aria-label="Slide 7">
+    <p class="kicker">06 &middot; What running the gateway means</p>
     <h2 class="h2">Small machine. Serious responsibility.</h2>
     <div class="stats">
       <div class="stat" data-tone="brass">
@@ -179,9 +226,9 @@
       government, so it is treated like a vault, not like a server.</p>
   </section>
 
-  <!-- 7 ─────────────────────────────── WHAT CAMDIGIKEY GIVES US -->
-  <section class="slide" aria-label="Slide 7">
-    <p class="kicker">06 &middot; CamDigiKey</p>
+  <!-- 8 ─────────────────────────────── WHAT CAMDIGIKEY GIVES US -->
+  <section class="slide" aria-label="Slide 8">
+    <p class="kicker">07 &middot; CamDigiKey</p>
     <h2 class="h2">Someone else does the hard identity check. We carry the result.</h2>
     <div class="split split--wide">
       <div>
@@ -205,9 +252,9 @@
     </div>
   </section>
 
-  <!-- 8 ─────────────────────────────── THE FLOW -->
-  <section class="slide" aria-label="Slide 8">
-    <p class="kicker">07 &middot; How a CamDigiKey sign-in works</p>
+  <!-- 9 ─────────────────────────────── THE FLOW -->
+  <section class="slide" aria-label="Slide 9">
+    <p class="kicker">08 &middot; How a CamDigiKey sign-in works</p>
     <h2 class="h2">The user scans a QR code. Everything else is ours to build.</h2>
     <div class="flow">
       <div class="flow__step">
@@ -222,8 +269,8 @@
       </div>
       <div class="flow__step" data-key="true">
         <span class="flow__n">03</span>
-        <p class="flow__t">They confirm with their face</p>
-        <p class="flow__d">CamDigiKey checks the person and approves the request on their phone.</p>
+        <p class="flow__t">They approve it in CamDigiKey</p>
+        <p class="flow__d">The government app checks the person. That check is theirs, never ours.</p>
       </div>
       <div class="flow__step">
         <span class="flow__n">04</span>
@@ -241,9 +288,9 @@
       writing any of this ourselves.</p>
   </section>
 
-  <!-- 9 ─────────────────────────────── THE CORRECTION -->
-  <section class="slide" aria-label="Slide 9">
-    <p class="kicker">08 &middot; One architecture decision to take now</p>
+  <!-- 10 ─────────────────────────────── THE CORRECTION -->
+  <section class="slide" aria-label="Slide 10">
+    <p class="kicker">09 &middot; One architecture decision to take now</p>
     <h2 class="h2">CamDigiKey does not plug into Keycloak.</h2>
     <div class="split">
       <div class="rail-col" data-tone="brass">
@@ -266,17 +313,17 @@
     </div>
   </section>
 
-  <!-- 10 ─────────────────────────────── PUBLIC VS GATED -->
-  <section class="slide" aria-label="Slide 10">
-    <p class="kicker">09 &middot; Why we do not have to wait</p>
+  <!-- 11 ─────────────────────────────── PUBLIC VS GATED -->
+  <section class="slide" aria-label="Slide 11">
+    <p class="kicker">10 &middot; Why we do not have to wait</p>
     <h2 class="h2">The government publishes almost everything except the keys.</h2>
     <div class="split">
       <div class="rail-col" data-tone="patina">
         <p class="rail-col__tag">Public today</p>
         <ul class="list" data-tone="patina">
-          <li>The full CamDigiKey specification and a working client library</li>
+          <li>CamDigiKey integration documents and a working client library</li>
           <li>Security Server install guides and automation scripts</li>
-          <li>The verification API documentation, including a test environment</li>
+          <li>Verification API documentation that names a development environment</li>
         </ul>
       </div>
       <div class="rail-col" data-tone="brass">
@@ -297,9 +344,9 @@
     </div>
   </section>
 
-  <!-- 11 ─────────────────────────────── TIMELINE -->
-  <section class="slide" aria-label="Slide 11">
-    <p class="kicker">10 &middot; The shape of the next eight months</p>
+  <!-- 12 ─────────────────────────────── TIMELINE -->
+  <section class="slide" aria-label="Slide 12">
+    <p class="kicker">11 &middot; The shape of the next eight months</p>
     <h2 class="h2">Two tracks. Only one of them is ours to schedule.</h2>
     <div class="tl">
       <div class="tl__months">
@@ -336,9 +383,9 @@
       designed so that waiting costs us nothing.</p>
   </section>
 
-  <!-- 12 ─────────────────────────────── RISKS -->
-  <section class="slide" aria-label="Slide 12">
-    <p class="kicker">11 &middot; What could go wrong</p>
+  <!-- 13 ─────────────────────────────── RISKS -->
+  <section class="slide" aria-label="Slide 13">
+    <p class="kicker">12 &middot; What could go wrong</p>
     <h2 class="h2">Three risks worth your attention.</h2>
     <table class="tbl">
       <thead><tr><th>Risk</th><th>Why it matters</th><th>What we do about it</th></tr></thead>
@@ -360,13 +407,14 @@
         </tr>
       </tbody>
     </table>
-    <p class="small">Ten further engineering findings — account takeover, data correlation, recovery
-      — are documented separately and are all fixable inside the plan above.</p>
+    <p class="small">Seventeen further engineering findings — account takeover, data correlation,
+      recovery, duplicate identities — are documented separately and are all fixable inside the
+      plan above.</p>
   </section>
 
-  <!-- 13 ─────────────────────────────── THE ASK -->
-  <section class="slide" aria-label="Slide 13">
-    <p class="kicker">12 &middot; What I need from you</p>
+  <!-- 14 ─────────────────────────────── THE ASK -->
+  <section class="slide" aria-label="Slide 14">
+    <p class="kicker">13 &middot; What I need from you</p>
     <h2 class="h2">Four decisions. All of them yours to make.</h2>
     <div class="grid4">
       <article class="card card--tint" data-tone="brass">
@@ -401,8 +449,8 @@
     </div>
   </section>
 
-  <!-- 14 ─────────────────────────────── CLOSE -->
-  <section class="slide s-title" aria-label="Slide 14">
+  <!-- 15 ─────────────────────────────── CLOSE -->
+  <section class="slide s-title" aria-label="Slide 15">
     <p class="kicker">The whole plan, in one line</p>
     <h1 class="h1" style="font-size:5.2cqw; max-width:22ch; text-align:left">Be holding a finished
       integration on the day the government opens the door.</h1>
@@ -414,7 +462,7 @@
   <div class="chrome">
     <span class="chrome__id">AttaID · CamDX &amp; CamDigiKey</span>
     <nav class="nav" aria-label="Slide navigation">
-      <span class="chrome__n"><span id="cur">1</span> / <span id="tot">14</span></span>
+      <span class="chrome__n"><span id="cur">1</span> / <span id="tot">15</span></span>
       <button id="prev" type="button" aria-label="Previous slide">‹</button>
       <button id="next" type="button" aria-label="Next slide">›</button>
     </nav>
