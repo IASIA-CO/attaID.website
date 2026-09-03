@@ -7,7 +7,7 @@
 <meta name="description" content="What is possible, what is not, and what to build in what order — the AttaID delivery plan.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300..700&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -46,8 +46,9 @@
     <p class="hero__lede">
       CamDX membership is the whole moat — a translated login page is not defensible, and anyone
       can copy it. So the plan has one organising goal: <strong>be holding a finished, tested
-      adapter on the day the credentials arrive.</strong> Everything else is what you ship while
-      the door is opening.
+      adapter on the day the credentials arrive.</strong> Everything else — Telegram, Facebook and
+      phone sign-in, linking, consent, organisations — is what you ship while the door is opening,
+      and it is most of the product.
     </p>
 
     <figure class="chart" aria-labelledby="chart-cap">
@@ -122,8 +123,8 @@
           <li>A CamDigiKey client library in <b>Node</b> — the language the stack is already in</li>
           <li>The full call surface: login token, access-token exchange, JWT validation, refresh, logout, organisation token, profile lookup, face image</li>
           <li>Security Server install guides, an HA variant behind a load balancer, and Ansible playbooks</li>
-          <li>A KYC Verification API spec referencing both development and production base URLs</li>
-          <li>Everything at L0–L2: linking, consent, organisations, attestation, provenance, recovery, sandbox</li>
+          <li>A KYC Verification API spec that names a development environment alongside production</li>
+          <li>Every everyday sign-in method — Telegram, Facebook, phone codes, existing app accounts — plus linking, consent, organisations, attestation, provenance and recovery. All of L0–L2, none of it gated.</li>
         </ul>
       </article>
       <article class="lane" data-track="permissions">
@@ -241,7 +242,14 @@
           <span class="phase__mark" aria-hidden="true"></span>
         </button>
         <div class="phase__body" id="ph1-body" hidden>
-          <p class="phase__target">Two things at once. Farms Nexus reads a revocable org-attested membership — and the CamDigiKey adapter passes end-to-end against a faithful simulator.</p>
+          <p class="phase__target">Three things at once. People sign in with the accounts they already have; Farms Nexus reads a revocable org-attested membership; and the CamDigiKey adapter passes end-to-end against a faithful simulator.</p>
+          <p class="phase__sub">The doors</p>
+          <ul class="do">
+            <li><b>Telegram, Facebook, phone</b> — the everyday sign-in methods the product goal names. Telegram Login is full OpenID Connect (authorization code with PKCE, RS256, published JWKS) and Facebook is OAuth2, so Keycloak brokers both with configuration alone — unlike CamDigiKey (AR-18).</li>
+            <li><b>AR-17</b> SMS one-time codes, behind a provider abstraction with two gateways, rate-limited and cost-capped. Section 7.3 rejects SMS outright; amend it to reject what it meant — SMS as a single-vendor sole channel.</li>
+            <li><b>AR-19 · F17 moves to P0.</b> No registration step plus three independent doors means one farmer gets three AttaIDs on day one. Deterministic pre-link on verified phone at first login, a prompt to link when a new provider carries a contact that already exists, and the alias table shipping here — not after the pilot.</li>
+            <li>Every social login lands at L0–L1 and says so. None of these providers verify a real-world identity.</li>
+          </ul>
           <p class="phase__sub">The claim</p>
           <ul class="do">
             <li><b>F1–F3</b> Progressive linking with proof, notifications, audit, and the AR-08 constraints present from the first migration.</li>
@@ -256,7 +264,7 @@
             <li>Build a simulator strict enough to fail the way production will, and verify the <i>official</i> library can talk to it. That is your independent check.</li>
             <li>Stand up a Security Server from the published playbooks. Rehearse CSR, import, activate, register — even with approval pending.</li>
           </ul>
-          <p class="phase__done"><b>Done when</b> A real Farms Nexus account links and keeps its history; its farmer-status field is deleted from the shipping branch, not a demo one; revoking a membership changes what it shows with no redeploy; and a Security Server has been built from scratch twice, by two different people.</p>
+          <p class="phase__done"><b>Done when</b> A real Farms Nexus account links and keeps its history; its farmer-status field is deleted from the shipping branch, not a demo one; revoking a membership changes what it shows with no redeploy; and a Security Server has been built from scratch twice, by two different people. And the duplicate test passes: one person signing in via Telegram, then Facebook, then a phone code ends up with <em>one</em> AttaID, not three.</p>
         </div>
       </article>
 
@@ -271,7 +279,7 @@
           <ul class="do">
             <li><b>F28</b> Developer portal, sandbox, test users, and the integration contract written down — including the exit commitment from AR-11.</li>
             <li><b>F7 / F8 / F9</b> SCIM subset, Shared Signals transmitter, back-channel logout, using RISC <code>identifier-changed</code> alongside CAEP.</li>
-            <li><b>F17</b> Merge and unmerge with alias resolution, and an event an unprepared app can survive.</li>
+            <li>Merge propagation — the downstream event an unprepared app can survive. The merge tooling itself shipped in PH1 (AR-19).</li>
             <li>Recovery tier two — L2 users recover through the organisation that attested them.</li>
             <li>Three metrics instrumented: time-to-first-login, share of apps consuming a provenance-carrying attribute, deterministic-to-reviewed ratio.</li>
           </ul>
@@ -334,12 +342,14 @@
   <section id="stack" class="band">
     <div class="band__head">
       <p class="eyebrow">03 — The stack</p>
-      <h2>Section 7 is largely right. Three changes.</h2>
+      <h2>Section 7 is largely right. One change, four additions, one constraint.</h2>
       <p class="lede">
         Next.js and NestJS in one language, PostgreSQL, Redis and BullMQ, Docker Compose, Traefik,
         Prisma, pgBackRest, Ansible — a sound small-team choice, correctly sized. The rejections of
-        Kubernetes, microservices, blockchain, own crypto and SMS OTP are all correct and worth
-        defending when someone proposes them again.
+        Kubernetes, microservices, blockchain and own crypto are all correct and worth defending
+        when someone proposes them again. The one to overturn is SMS: Section 7.3 rejects one-time
+        codes outright, the product goal needs phone sign-in, and the real objection was to a
+        single-vendor sole channel rather than to SMS itself (AR-17).
       </p>
     </div>
 
@@ -381,7 +391,7 @@
   <section id="open" class="band">
     <div class="band__head">
       <p class="eyebrow">04 — What is not possible to answer yet</p>
-      <h2>Four questions nobody has decided.</h2>
+      <h2>Five questions nobody has decided.</h2>
       <p class="lede">
         These are not engineering problems and they will not be solved by building. Each one can
         invalidate a part of the plan above, and the first can invalidate all of it.
@@ -393,8 +403,8 @@
         <h3>Can AttaID become a CamDX member at all?</h3>
         <p>
           The risk register frames membership as <i>waiting</i> — “start the application now; it is
-          bureaucratic.” But nothing confirms a private company is eligible. Members are
-          predominantly ministries and banks. A queue you wait out; an eligibility bar you clear
+          bureaucratic.” But nothing confirms a private company is eligible, and we have not seen the
+          member register. A queue you wait out; an eligibility bar you clear
           through a sponsor, or restructure around. Completely different responses, and this is the
           one that can invalidate everything else on this page.
         </p>
@@ -407,6 +417,21 @@
         </p>
       </li>
       <li class="open" data-weight="2">
+        <h3>Is this one hosted service, or software anyone can run?</h3>
+        <p>
+          The goal describes open-source software any agency, NGO or startup can self-host. The
+          architecture describes a single broker that holds CamDX membership on behalf of a long
+          tail that cannot get it. Those are two different products, and the document never says
+          which one is being built.
+        </p>
+        <p class="open__act">
+          <b>The reconciliation</b> Tier one is the open-source core — providers, OIDC, consent,
+          linking — that anyone can deploy. Tier two is the instance that holds membership and sells
+          verified identity to the instances that cannot. That keeps the moat exactly where it is
+          and is honest about what self-hosting gives you.
+        </p>
+      </li>
+      <li class="open" data-weight="3">
         <h3>Will anyone outside the company integrate?</h3>
         <p>
           Farms Nexus and CashEW are ours, so the first integration proves the mechanism works but
@@ -420,7 +445,7 @@
           itself the most useful finding in this document.
         </p>
       </li>
-      <li class="open" data-weight="3">
+      <li class="open" data-weight="4">
         <h3>What do we owe an app that depends on us?</h3>
         <p>
           The plan asks apps to delete their own identity data — that is the whole value. It also
@@ -434,7 +459,7 @@
           Depending on us is a favour they are doing us.
         </p>
       </li>
-      <li class="open" data-weight="4">
+      <li class="open" data-weight="5">
         <h3>Is assisted registration real consent?</h3>
         <p>
           Stage 3 has a cooperative verifier registering farmers. If the verifier holds the phone
@@ -479,7 +504,7 @@
         directly: only they can confirm what a given membership tier grants.
       </p>
       <p class="foot__links">
-        <a href="https://claude.ai/code/artifact/9f3df481-ed65-4631-9a26-ef846d6c0f9b">Engineering review — 13 findings in full ↗</a>
+        <a href="https://claude.ai/code/artifact/9f3df481-ed65-4631-9a26-ef846d6c0f9b">Engineering review — 20 findings in full ↗</a>
         <a href="https://claude.ai/code/artifact/085770ce-6cc9-434b-82e9-47cde268b70b">Gaps and feasibility analysis ↗</a>
       </p>
     </footer>
