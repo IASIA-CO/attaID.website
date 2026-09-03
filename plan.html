@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AttaID Delivery Plan — Detail</title>
+<meta name="description" content="What is possible, what is not, and what to build in what order — the AttaID delivery plan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<button class="theme" id="theme" type="button" aria-label="Switch to dark theme">
+  <span class="theme__dot" aria-hidden="true"></span>
+  <span class="theme__label">Dark</span>
+</button>
+
+<nav class="rail" aria-label="Sections">
+  <div class="rail__mark">
+    <span class="rail__id">ATTA-KH</span>
+    <span class="rail__name">Delivery Plan</span>
+  </div>
+  <ol class="rail__list">
+    <li><a href="#gate" data-spy>The gate</a></li>
+    <li><a href="#plan" data-spy>The plan</a></li>
+    <li><a href="#stack" data-spy>The stack</a></li>
+    <li><a href="#open" data-spy>Open questions</a></li>
+    <li><a href="#week" data-spy>This week</a></li>
+  </ol>
+  <div class="rail__foot">
+    <a href="https://claude.ai/code/artifact/9f3df481-ed65-4631-9a26-ef846d6c0f9b">Architecture review ↗</a>
+    <a href="https://claude.ai/code/artifact/085770ce-6cc9-434b-82e9-47cde268b70b">Gaps &amp; feasibility ↗</a>
+  </div>
+</nav>
+
+<main id="main">
+
+  <!-- ================= HERO ================= -->
+  <header class="hero">
+    <p class="eyebrow">Delivery plan · against System Design v1.0</p>
+    <h1 class="hero__title">One door opens on a date<br>nobody controls.</h1>
+    <p class="hero__lede">
+      CamDX membership is the whole moat — a translated login page is not defensible, and anyone
+      can copy it. So the plan has one organising goal: <strong>be holding a finished, tested
+      adapter on the day the credentials arrive.</strong> Everything else is what you ship while
+      the door is opening.
+    </p>
+
+    <figure class="chart" aria-labelledby="chart-cap">
+      <div class="chart__scroll">
+        <div class="chart__grid" role="img" aria-label="Timeline of two parallel tracks over eight months: permissions and product. The CamDX membership bar has no end date.">
+
+          <div class="chart__months" aria-hidden="true">
+            <span></span>
+            <span>M1</span><span>M2</span><span>M3</span><span>M4</span>
+            <span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9+</span>
+          </div>
+
+          <section class="track" data-track="permissions">
+            <div class="track__row">
+              <span class="track__name">Permissions</span>
+              <span class="bar bar--endless" style="--from:2; --to:11;">CamDX membership — apply week 1, then pursue</span>
+            </div>
+            <div class="track__row">
+              <span></span>
+              <span class="bar" style="--from:2; --to:4;">Ask: which member class?</span>
+              <span class="bar" style="--from:4; --to:8;">Lawful basis · controller/processor · retention</span>
+            </div>
+          </section>
+
+          <section class="track" data-track="product">
+            <div class="track__row">
+              <span class="track__name">Product</span>
+              <button class="bar bar--link" style="--from:2; --to:3;" data-phase="ph0">PH0 Decide</button>
+              <button class="bar bar--link" style="--from:3; --to:6;" data-phase="ph1">PH1 Provable claim + adapter</button>
+              <button class="bar bar--link" style="--from:6; --to:8;" data-phase="ph2">PH2 Repeatable</button>
+              <button class="bar bar--link" style="--from:8; --to:10;" data-phase="ph3">PH3 Pilot-grade</button>
+            </div>
+            <div class="track__row">
+              <span></span>
+              <span class="bar bar--ghost" style="--from:3; --to:8;">CamDigiKey adapter vs simulator · Security Server rehearsed</span>
+              <button class="bar bar--link bar--gated" style="--from:10; --to:11;" data-phase="ph4">PH4 Swap in credentials</button>
+            </div>
+            <div class="track__row">
+              <span></span>
+              <span class="bar bar--ghost" style="--from:4; --to:7;">One cooperative attesting real members</span>
+              <span class="bar bar--ghost" style="--from:8; --to:10;">Stage 3 field pilot</span>
+            </div>
+          </section>
+
+        </div>
+      </div>
+      <figcaption id="chart-cap">
+        Months are relative to start, not calendar dates. The bar that runs off the edge is not a
+        schedule — it is a queue nobody on the team controls. Select a phase to open it.
+      </figcaption>
+    </figure>
+  </header>
+
+  <!-- ================= THE GATE ================= -->
+  <section id="gate" class="band">
+    <div class="band__head">
+      <p class="eyebrow">01 — What is possible</p>
+      <h2>Most of the government integration is already public.</h2>
+      <p class="lede">
+        This is the finding that reshapes the schedule. The CamDigiKey protocol, a working Node
+        client library, the Security Server install guides and Ansible playbooks are all published.
+        Only the credentials are gated — which means the integration can be built and tested now,
+        and membership arrives to finished work rather than starting it.
+      </p>
+    </div>
+
+    <div class="split">
+      <article class="lane" data-track="product">
+        <p class="lane__tag">Buildable today</p>
+        <h3>The protocol and the code</h3>
+        <ul>
+          <li>A CamDigiKey client library in <b>Node</b> — the language the stack is already in</li>
+          <li>The full call surface: login token, access-token exchange, JWT validation, refresh, logout, organisation token, profile lookup, face image</li>
+          <li>Security Server install guides, an HA variant behind a load balancer, and Ansible playbooks</li>
+          <li>A KYC Verification API spec referencing both development and production base URLs</li>
+          <li>Everything at L0–L2: linking, consent, organisations, attestation, provenance, recovery, sandbox</li>
+        </ul>
+      </article>
+      <article class="lane" data-track="permissions">
+        <p class="lane__tag">Only CamDX can issue</p>
+        <h3>The credentials and the identity</h3>
+        <ul>
+          <li>Member Name, Member Class and Member Code, assigned by the Central Authority</li>
+          <li><code>CLIENT_ID</code>, <code>HMAC_KEY</code>, <code>AES_SECRET_KEY</code>, <code>AES_IV_PARAMS</code>, registered client domain</li>
+          <li>Client and trust <code>.p12</code> keystores for mutual TLS</li>
+          <li>Signed AuthKey and SignKey certificates, issued against CSRs you submit</li>
+          <li>Approval of the Security Server registration itself</li>
+        </ul>
+      </article>
+    </div>
+
+    <aside class="alarm">
+      <p class="alarm__tag">Correction — changes the architecture</p>
+      <h3>Keycloak cannot broker CamDigiKey</h3>
+      <p>
+        Section 7.1 justifies Keycloak partly on “OIDC brokering to CamDigiKey.” That is not
+        achievable as written. CamDigiKey is not a standard OIDC provider: the flow is a bespoke
+        token exchange wrapped in <b>HMAC request signing, AES payload encryption, and mutual TLS
+        via <code>.p12</code> keystores</b>. Keycloak's generic OIDC and SAML brokers do not speak that.
+      </p>
+      <p>
+        Run the exchange in NestJS using the published Node library, and let Keycloak issue tokens
+        for an identity NestJS has already established. The alternative is reimplementing a working
+        Node library in Java as a Keycloak SPI — contradicting Section 7.1's own argument that one
+        language across the stack is a small team's biggest force multiplier.
+      </p>
+    </aside>
+
+    <div class="spec">
+      <h3 class="spec__title">Security Server — the real numbers</h3>
+      <dl class="spec__list">
+        <div><dt>Host</dt><dd><b>Ubuntu 24.04 LTS · 2 cores · 4 GB · 100 GB · 100 Mbps.</b> Modest hardware, and two of them for the HA topology Section 8.4 wants — a second and third machine the current deployment plan does not account for.</dd></div>
+        <div><dt>Outbound</dt><dd>Central Server 443, 4001 · Management 5500, 5577 · OCSP and timestamping 443 · partner servers 5500, 5577. Confirm your VPS provider's egress rules before choosing a host.</dd></div>
+        <div><dt>Inbound</dt><dd>Admin UI on 4000, never internet-facing. Bastion or VPN only — this host holds your member signing key.</dd></div>
+        <div><dt>Keys</dt><dd>AuthKey and SignKey CSRs go to the Central Authority. Losing them is the weeks-long bureaucratic recovery R7 describes. Escrow from day one.</dd></div>
+        <div><dt>Provisioning</dt><dd>Use the published Ansible playbooks. A hand-built Security Server cannot be rebuilt under pressure.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ================= PLAN ================= -->
+  <section id="plan" class="band">
+    <div class="band__head">
+      <p class="eyebrow">02 — The plan</p>
+      <h2>Aim at one sentence, not a platform.</h2>
+      <p class="lede">
+        Twenty-nine features is a programme, and a small team that starts everywhere finishes
+        nothing. So the first months aim at a single claim you can put in front of a funder,
+        a ministry, or the next integrator:
+      </p>
+      <blockquote class="pull">
+        “Farms Nexus deleted its farmer-status field. It reads a revocable cooperative
+        membership from AttaID instead.”
+      </blockquote>
+      <p class="lede">
+        It is the document's own Section 6.7 example. It is the second migration dimension R10
+        predicts most integrations never reach. It needs no CamDX, so nothing about it waits in a
+        queue. And it is something the app genuinely cannot do alone — Farms Nexus can verify a
+        phone number itself, but it cannot know a cooperative revoked someone last Tuesday.
+      </p>
+
+      <aside class="alarm alarm--note">
+        <p class="alarm__tag">Farms Nexus is your own platform</p>
+        <h3>This proves the mechanism, not the market.</h3>
+        <p>
+          Building the identity layer against your own products first is a sound strategy — it is
+          how most platform companies start, and it removes the riskiest scheduling dependency in
+          PH1, because nobody outside the company has to say yes. Treat that as good news.
+        </p>
+        <p>
+          But be precise about what the claim then demonstrates. “Farms Nexus consumes AttaID
+          attributes” shows that you can integrate with yourself. A funder, a ministry, or the next
+          integrator will read it exactly that way, and they will be right to. Section 2.1's
+          long-tail thesis — that a commune app or a cooperative will adopt a shared identity
+          layer — stays an assertion until someone who does not report to you accepts the
+          dependency. <b>That moves the burden of proof to PH2</b>, which stops being “prove the
+          process repeats” and becomes “prove anyone else will do this at all.”
+        </p>
+      </aside>
+    </div>
+
+    <div class="phases" id="phases">
+
+      <article class="phase" id="ph0" data-track="product">
+        <button class="phase__head" type="button" aria-expanded="false" aria-controls="ph0-body">
+          <span class="phase__when">PH0 · weeks 1–2</span>
+          <span class="phase__title">Decide, then migrate the schema</span>
+          <span class="phase__mark" aria-hidden="true"></span>
+        </button>
+        <div class="phase__body" id="ph0-body" hidden>
+          <p class="phase__target">Nine decisions written as ADRs, and the schema that follows them, before a feature is built on a guess.</p>
+          <ul class="do">
+            <li><b>CamDigiKey lives in NestJS, not Keycloak</b> — the AR-13 correction, as an ADR. It reshapes the container diagram.</li>
+            <li><b>AR-07</b> PostgreSQL is the system of record; Keycloak holds credentials and sessions.</li>
+            <li><b>AR-04</b> Pairwise subs persisted per application, never derived.</li>
+            <li><b>AR-08</b> Link constraints and the re-link policy.</li>
+            <li><b>AR-03</b> No user holds a government IdP as their sole credential.</li>
+            <li><b>AR-05</b> Verification never blocks authentication; high-value scopes fail closed.</li>
+            <li><b>Recovery model</b>, tiered by assurance — the one genuinely new design here.</li>
+            <li><b>AR-15</b> Farms Nexus and CashEW integrate only through the public API and documented claim shapes an outside app would use. No shared database, no privileged path. Both are ours, which is precisely why it has to be a written rule.</li>
+            <li><b>AR-16</b> Version the API from the first release, with a published deprecation policy. F26 turns bare claim values into objects — a breaking change for every integrator unless versioning lands first.</li>
+          </ul>
+          <p class="phase__done"><b>Done when</b> ADRs are signed, migrations applied, and the adversarial test cases written — even if every one is failing.</p>
+        </div>
+      </article>
+
+      <article class="phase" id="ph1" data-track="product">
+        <button class="phase__head" type="button" aria-expanded="false" aria-controls="ph1-body">
+          <span class="phase__when">PH1 · months 2–4</span>
+          <span class="phase__title">The provable claim, and the adapter beside it</span>
+          <span class="phase__mark" aria-hidden="true"></span>
+        </button>
+        <div class="phase__body" id="ph1-body" hidden>
+          <p class="phase__target">Two things at once. Farms Nexus reads a revocable org-attested membership — and the CamDigiKey adapter passes end-to-end against a faithful simulator.</p>
+          <p class="phase__sub">The claim</p>
+          <ul class="do">
+            <li><b>F1–F3</b> Progressive linking with proof, notifications, audit, and the AR-08 constraints present from the first migration.</li>
+            <li><b>F25 + AR-10</b> Organisations and attestation, bounded scope, evidence rows so revocation cascades. Pulled forward — without it the claim has nothing to release.</li>
+            <li><b>F5 / F26</b> Provenance on every released attribute.</li>
+            <li>Consent as a replayable record, plus the access log.</li>
+            <li><b>F6</b> Transactional outbox and workers. Recovery for L0–L1. Offline QR via short-lived Ed25519 JWS.</li>
+          </ul>
+          <p class="phase__sub">The adapter</p>
+          <ul class="do">
+            <li>Wrap the published Node client library behind the existing provider seam — do not reimplement the crypto.</li>
+            <li>Build a simulator strict enough to fail the way production will, and verify the <i>official</i> library can talk to it. That is your independent check.</li>
+            <li>Stand up a Security Server from the published playbooks. Rehearse CSR, import, activate, register — even with approval pending.</li>
+          </ul>
+          <p class="phase__done"><b>Done when</b> A real Farms Nexus account links and keeps its history; its farmer-status field is deleted from the shipping branch, not a demo one; revoking a membership changes what it shows with no redeploy; and a Security Server has been built from scratch twice, by two different people.</p>
+        </div>
+      </article>
+
+      <article class="phase" id="ph2" data-track="product">
+        <button class="phase__head" type="button" aria-expanded="false" aria-controls="ph2-body">
+          <span class="phase__when">PH2 · months 5–6</span>
+          <span class="phase__title">Land the first integrator you don't own</span>
+          <span class="phase__mark" aria-hidden="true"></span>
+        </button>
+        <div class="phase__body" id="ph2-body" hidden>
+          <p class="phase__target">An application outside your own company integrates unaided. Farms Nexus proves the mechanism works; an external app is the first evidence that anyone else will accept the dependency — which is the actual thesis.</p>
+          <ul class="do">
+            <li><b>F28</b> Developer portal, sandbox, test users, and the integration contract written down — including the exit commitment from AR-11.</li>
+            <li><b>F7 / F8 / F9</b> SCIM subset, Shared Signals transmitter, back-channel logout, using RISC <code>identifier-changed</code> alongside CAEP.</li>
+            <li><b>F17</b> Merge and unmerge with alias resolution, and an event an unprepared app can survive.</li>
+            <li>Recovery tier two — L2 users recover through the organisation that attested them.</li>
+            <li>Three metrics instrumented: time-to-first-login, share of apps consuming a provenance-carrying attribute, deterministic-to-reviewed ratio.</li>
+          </ul>
+          <p class="phase__done"><b>Done when</b> An app your company does not own reaches first successful login using only the portal, with no call to the team — and its owner has read and accepted the exit terms from AR-11.</p>
+        </div>
+      </article>
+
+      <article class="phase" id="ph3" data-track="product">
+        <button class="phase__head" type="button" aria-expanded="false" aria-controls="ph3-body">
+          <span class="phase__when">PH3 · months 7–8</span>
+          <span class="phase__title">Survive contact with 300 real users</span>
+          <span class="phase__mark" aria-hidden="true"></span>
+        </button>
+        <div class="phase__body" id="ph3-body" hidden>
+          <p class="phase__target">Run the Stage 3 pilot on infrastructure that is honestly described, with a restore that has actually been performed.</p>
+          <ul class="do">
+            <li>Pilot topology — two nodes, managed Postgres with replica, Keycloak HA pair.</li>
+            <li><b>F18</b> read-only degraded mode · <b>F19</b> status page and incident comms · <b>F24</b> restore drills with the achieved RTO recorded.</li>
+            <li><b>F22</b> Low-connectivity PWA behaviour, tested in a field rather than on a throttled laptop.</li>
+            <li>Review-queue tooling and a named person to work it — Khmer name matching will send more here than the tier table implies.</li>
+          </ul>
+          <p class="phase__done"><b>Done when</b> A restore drill has run and the real RTO is written down, whatever it turned out to be; and the review queue is clearing rather than growing.</p>
+        </div>
+      </article>
+
+      <article class="phase" id="ph4" data-track="permissions">
+        <button class="phase__head" type="button" aria-expanded="false" aria-controls="ph4-body">
+          <span class="phase__when">PH4 · gated · 2–4 weeks</span>
+          <span class="phase__title">Swap the simulator for the real thing</span>
+          <span class="phase__mark" aria-hidden="true"></span>
+        </button>
+        <div class="phase__body" id="ph4-body" hidden>
+          <p class="phase__target">Credentials arrive and L4 becomes reachable. Because you wrapped the official library rather than writing your own crypto, this is an integration-hardening window — not a three-month project.</p>
+          <ul class="do">
+            <li>Import the real client ID, HMAC and AES material, and the <code>.p12</code> keystores. Point at production base URLs.</li>
+            <li>Complete Security Server registration: submit CSRs, import and activate certificates, register the subsystem, await approval.</li>
+            <li><b>F14</b> verify.gov.kh · <b>F15</b> assurance mapping finalised against what CamDigiKey actually returns.</li>
+            <li><b>F27</b> Signed and encrypted payloads — mandatory now, because government-derived claims are flowing to third parties.</li>
+            <li>Recovery tier three: L4 users re-verify through CamDigiKey. L4 TTLs set from risk, fail-closed enforced.</li>
+          </ul>
+          <p class="phase__note">Size the hardening honestly. Without development credentials your simulator encodes <i>your reading</i> of the documentation — your client and simulator can share the same misreading while every test passes. Wrapping the published library removes most of that risk, but first contact with production is still where you learn what the payloads really look like.</p>
+          <p class="phase__done"><b>Done when</b> An L4 badge exists that was granted by an authorised adapter and could never have been granted by a mock.</p>
+        </div>
+      </article>
+
+    </div>
+
+    <div class="defer">
+      <h3>Deliberately deferred</h3>
+      <dl>
+        <div><dt>F10 bulk pre-link</dt><dd>The most dangerous endpoint in the system (AR-01), and per AR-14 it solves a problem the launch does not have: both initial apps are ours, so their migration is an authenticated server-to-server job under dual control, not a public matching API. Reconsider when an app we do <em>not</em> own commits to migrating.</dd></div>
+        <div><dt>DG SuperApp</dt><dd>Aspirational and partnership-dependent by the document's own assessment. Membership is the credential that makes the conversation possible at all.</dd></div>
+        <div><dt>IPIS</dt><dd>Design the seam, do not depend on it. Reconsider when it is authoritative in practice, not only in the 2023 law.</dd></div>
+        <div><dt>A native mobile app</dt><dd>The PWA has not been shown insufficient, and Stage 3 exists precisely to find out.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ================= STACK ================= -->
+  <section id="stack" class="band">
+    <div class="band__head">
+      <p class="eyebrow">03 — The stack</p>
+      <h2>Section 7 is largely right. Three changes.</h2>
+      <p class="lede">
+        Next.js and NestJS in one language, PostgreSQL, Redis and BullMQ, Docker Compose, Traefik,
+        Prisma, pgBackRest, Ansible — a sound small-team choice, correctly sized. The rejections of
+        Kubernetes, microservices, blockchain, own crypto and SMS OTP are all correct and worth
+        defending when someone proposes them again.
+      </p>
+    </div>
+
+    <div class="stack">
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="change">Change</p>
+        <h3>Keycloak becomes a token service</h3>
+        <p>It was kept partly for brokering it cannot do (AR-13), and partly for a user store you are already building. Narrow it to credentials, sessions and Google brokering. Consent and linking screens live in Next.js where F26 and F29 need them.</p>
+      </article>
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="add">Add</p>
+        <h3>An RFC 9497 OPRF library</h3>
+        <p>Makes Pattern C's bulk match a real control instead of a documented oracle. Do not hand-roll the protocol — the failure mode is silent.</p>
+      </article>
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="add">Add</p>
+        <h3><code>jose</code> and your own Security Event Tokens</h3>
+        <p>No Node library for Shared Signals is worth adopting. A SET is a signed JWT with an <code>events</code> claim — small to emit. The hard half is the receiver in each connected app.</p>
+      </article>
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="add">Add</p>
+        <h3>Ed25519 signing with overlapping JWKS</h3>
+        <p>64-byte signatures are what make the offline QR payload fit in a scannable code. Overlapping key validity is what makes rotation not an outage.</p>
+      </article>
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="add">Add</p>
+        <h3>A SCIM subset, not a SCIM server</h3>
+        <p>In practice “SCIM 2.0” means Users, PATCH, and filtering on <code>externalId</code>. A conformant server is weeks spent on a spec nobody exercises completely.</p>
+      </article>
+      <article class="stack__card">
+        <p class="stack__tag" data-kind="keep">Constrain</p>
+        <h3>PostgreSQL, shaped for Khmer</h3>
+        <p>Separate <code>name_km</code> and <code>name_latin</code> — never auto-transliterate. <code>pg_trgm</code> and <code>unaccent</code> on the Latin form only. Not <code>tsvector</code> for Khmer: the parser does not segment it, so a whole name becomes one token and search silently returns nothing.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= OPEN ================= -->
+  <section id="open" class="band">
+    <div class="band__head">
+      <p class="eyebrow">04 — What is not possible to answer yet</p>
+      <h2>Four questions nobody has decided.</h2>
+      <p class="lede">
+        These are not engineering problems and they will not be solved by building. Each one can
+        invalidate a part of the plan above, and the first can invalidate all of it.
+      </p>
+    </div>
+
+    <ol class="opens">
+      <li class="open" data-weight="1">
+        <h3>Can AttaID become a CamDX member at all?</h3>
+        <p>
+          The risk register frames membership as <i>waiting</i> — “start the application now; it is
+          bureaucratic.” But nothing confirms a private company is eligible. Members are
+          predominantly ministries and banks. A queue you wait out; an eligibility bar you clear
+          through a sponsor, or restructure around. Completely different responses, and this is the
+          one that can invalidate everything else on this page.
+        </p>
+        <p class="open__act">
+          <b>Encouraging signal</b> Security Server registration requires a Member <i>Class</i>
+          assigned by the Central Authority, and X-Road convention has several including
+          non-government. Operating Farms Nexus and CashEW also makes a more substantial
+          application than a standalone identity startup would. <b>Ask directly:</b> which classes
+          exist, and which would we fall into?
+        </p>
+      </li>
+      <li class="open" data-weight="2">
+        <h3>Will anyone outside the company integrate?</h3>
+        <p>
+          Farms Nexus and CashEW are ours, so the first integration proves the mechanism works but
+          not that the market wants it. The long-tail thesis — that commune apps, cooperatives and
+          NGO platforms will adopt a shared identity layer rather than roll their own login —
+          remains an assertion until someone who does not report to us accepts the dependency.
+        </p>
+        <p class="open__act">
+          <b>Decide now, not in month five</b> Name one target external integrator and treat
+          landing them as PH2's real definition of done. If we cannot name one today, that is
+          itself the most useful finding in this document.
+        </p>
+      </li>
+      <li class="open" data-weight="3">
+        <h3>What do we owe an app that depends on us?</h3>
+        <p>
+          The plan asks apps to delete their own identity data — that is the whole value. It also
+          means AttaID going down takes their logins with it. Internally that is concentration risk
+          on our own revenue platforms. Externally it is the first question any serious integrator's
+          lawyer will ask, and we have no answer written down: no data export, no wind-down path, no
+          continuity commitment.
+        </p>
+        <p class="open__act">
+          Cheap to write before the first external integration, expensive to negotiate afterwards.
+          Depending on us is a favour they are doing us.
+        </p>
+      </li>
+      <li class="open" data-weight="4">
+        <h3>Is assisted registration real consent?</h3>
+        <p>
+          Stage 3 has a cooperative verifier registering farmers. If the verifier holds the phone
+          and taps through the consent screen, that is not consent — and it is the exact setting
+          where consent theatre happens.
+        </p>
+        <p class="open__act">
+          Needs a designed answer: what the farmer is shown, in Khmer, read aloud where needed, and
+          a record of <i>how</i> consent was taken rather than only that it was. A legal-basis
+          question as much as a design one.
+        </p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= WEEK ================= -->
+  <section id="week" class="band band--last">
+    <div class="band__head">
+      <p class="eyebrow">05 — Start here</p>
+      <h2>This week.</h2>
+    </div>
+    <ol class="week">
+      <li><b>Ask CamDX which member class we would fall into.</b> It is a five-minute question, and the answer decides whether this is a queue or a wall.</li>
+      <li><b>Start the membership application.</b> Note the process itself requires a CamDigiKey account, so someone has to create one first. Longest lead time in the plan; week 1 is the cheapest week to begin.</li>
+      <li><b>Build a Security Server on a throwaway VM</b> from the published guides and playbooks. You learn the real constraints in a day for almost nothing.</li>
+      <li><b>Read the CamDigiKey client library end to end</b> and write the ADR that moves the integration into NestJS. Longest architectural tail of anything here.</li>
+      <li><b>Name one target external integrator</b> — a commune app, a fisheries portal, a cooperative. Farms Nexus proves the mechanism; an app we do not own is the only thing that proves the market. If we cannot name one, say so out loud.</li>
+      <li><b>Book the legal conversation</b>, and run the PH0 decision session: half a day, nine decisions, nine ADRs.</li>
+    </ol>
+
+    <footer class="foot">
+      <p>
+        Written against <i>AttaID — System Design &amp; Architecture v1.0</i> (draft for review,
+        16 July 2026). AR-nn are review findings; F-nn, ADR-nnn and section references are the
+        document's own. Durations are estimates conditional on the assumptions in each phase, not
+        commitments.
+      </p>
+      <p>
+        CamDX and CamDigiKey detail is drawn from publicly published documentation and client
+        libraries — the Security Server installation guides, the CamDigiKey Node client library, and
+        the CamDigiKey integration documents. Verify every credential-related step with CamDX
+        directly: only they can confirm what a given membership tier grants.
+      </p>
+      <p class="foot__links">
+        <a href="https://claude.ai/code/artifact/9f3df481-ed65-4631-9a26-ef846d6c0f9b">Engineering review — 13 findings in full ↗</a>
+        <a href="https://claude.ai/code/artifact/085770ce-6cc9-434b-82e9-47cde268b70b">Gaps and feasibility analysis ↗</a>
+      </p>
+    </footer>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

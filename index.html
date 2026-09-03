@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AttaID — CamDX &amp; CamDigiKey</title>
+<meta name="description" content="How AttaID connects to CamDX and builds the CamDigiKey integration — the plan and the decisions needed.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=IBM+Plex+Mono:wght@400;500;600&family=Public+Sans:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="deck.css">
+</head>
+<body>
+
+<div class="stage">
+<div class="deck" id="deck">
+
+  <!-- 1 ─────────────────────────────── TITLE -->
+  <section class="slide s-title is-on" aria-label="Slide 1">
+    <p class="kicker">AttaID &middot; <b>ATTA-KH</b></p>
+    <h1 class="h1">Keycloak,<br>but for Cambodia.</h1>
+    <div class="rule"></div>
+    <p class="lead">One identity across all our applications — and the only Cambodian
+      identity layer that speaks to the government's own systems.</p>
+    <p class="sub">CamDX &middot; CamDigiKey &middot; Delivery plan</p>
+  </section>
+
+  <!-- 2 ─────────────────────────────── THE POSITION -->
+  <section class="slide" aria-label="Slide 2">
+    <p class="kicker">01 &middot; Where the value actually is</p>
+    <h2 class="h2">A translated login page is not a business.</h2>
+    <div class="split">
+      <div class="rail-col" data-tone="brass">
+        <p class="rail-col__tag">What anyone can copy</p>
+        <p class="body">Keycloak already speaks Khmer. Theming and translation get a competitor a
+          localised login screen in a week. Sign-in, sessions, password resets — all commodity.</p>
+      </div>
+      <div class="rail-col" data-tone="patina">
+        <p class="rail-col__tag">What they cannot</p>
+        <p class="body">Membership of <b class="text-1">CamDX</b> and a working
+          <b class="text-1">CamDigiKey</b> integration. That is a door only the government opens,
+          and a commune app or a farmer cooperative will never walk through it alone.</p>
+      </div>
+    </div>
+    <div class="callout" data-tone="brass">
+      <p class="h3">We integrate with the government once. We serve the long tail many times.</p>
+      <p class="body">That sentence is the company. Everything in this deck serves it.</p>
+    </div>
+  </section>
+
+  <!-- 3 ─────────────────────────────── THE LANDSCAPE -->
+  <section class="slide" aria-label="Slide 3">
+    <p class="kicker">02 &middot; The four government systems that matter</p>
+    <h2 class="h2">We integrate with them. We never impersonate them.</h2>
+    <div class="grid4">
+      <article class="card" data-tone="brass">
+        <p class="card__tag">Transport</p>
+        <p class="h3">CamDX</p>
+        <p class="small">The national data exchange, built on Estonia's X-Road. Every government
+          integration travels through it. We must become a member.</p>
+      </article>
+      <article class="card" data-tone="steel">
+        <p class="card__tag">Identity</p>
+        <p class="h3">CamDigiKey</p>
+        <p class="small">National eKYC and authentication. Scan a QR, prove who you are. Our only
+          realistic route to strong verified identity.</p>
+      </article>
+      <article class="card" data-tone="patina">
+        <p class="card__tag">Documents</p>
+        <p class="h3">verify.gov.kh</p>
+        <p class="small">Checks that a document or credential is genuine. Feeds our evidence
+          records once membership is live.</p>
+      </article>
+      <article class="card">
+        <p class="card__tag">Future</p>
+        <p class="h3">IPIS</p>
+        <p class="small">The emerging national population register. We design the connection point
+          now and depend on none of it yet.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 4 ─────────────────────────────── HOW CAMDX WORKS -->
+  <section class="slide" aria-label="Slide 4">
+    <p class="kicker">03 &middot; How CamDX works</p>
+    <h2 class="h2">Every member runs its own gateway. Even CamDX cannot read the traffic.</h2>
+
+    <svg class="diagram" viewBox="0 0 900 200" role="img"
+         aria-label="AttaID connects to its own Security Server, which exchanges signed and encrypted messages across the CamDX network with the government's Security Server, which fronts CamDigiKey.">
+      <rect class="dg-box dg-box--steel" x="4" y="62" width="150" height="66" rx="3"/>
+      <text class="dg-name" x="79" y="90" text-anchor="middle">AttaID</text>
+      <text class="dg-sub"  x="79" y="108" text-anchor="middle">our platform</text>
+
+      <path class="dg-line" d="M158 95 H214"/>
+      <path class="dg-line" d="M206 89 l8 6 -8 6"/>
+
+      <rect class="dg-box dg-box--brass" x="218" y="52" width="168" height="86" rx="3"/>
+      <text class="dg-name" x="302" y="80" text-anchor="middle">Our Security Server</text>
+      <text class="dg-sub"  x="302" y="98" text-anchor="middle">signs · encrypts</text>
+      <text class="dg-sub"  x="302" y="114" text-anchor="middle">holds our member keys</text>
+
+      <path class="dg-line dg-line--live" d="M390 95 H514"/>
+      <text class="dg-label" x="452" y="80" text-anchor="middle" style="fill:var(--brass)">CamDX</text>
+      <text class="dg-label" x="452" y="176" text-anchor="middle">the payload stays sealed end to end — CamDX carries it but cannot read it</text>
+
+      <rect class="dg-box dg-box--brass" x="518" y="52" width="168" height="86" rx="3"/>
+      <text class="dg-name" x="602" y="80" text-anchor="middle">Their Security Server</text>
+      <text class="dg-sub"  x="602" y="98" text-anchor="middle">verifies · decrypts</text>
+
+      <path class="dg-line" d="M690 95 H746"/>
+      <path class="dg-line" d="M738 89 l8 6 -8 6"/>
+
+      <rect class="dg-box dg-box--steel" x="750" y="62" width="146" height="66" rx="3"/>
+      <text class="dg-name" x="823" y="90" text-anchor="middle">CamDigiKey</text>
+      <text class="dg-sub"  x="823" y="108" text-anchor="middle">eKYC · auth</text>
+    </svg>
+
+    <p class="body">A Security Server is a dedicated, hardened machine that signs and encrypts every
+      exchange. It is our end of the government pipe, it holds the keys that prove we are us, and
+      operating one is a condition of membership — not an optional extra.</p>
+  </section>
+
+  <!-- 5 ─────────────────────────────── JOINING CAMDX -->
+  <section class="slide" aria-label="Slide 5">
+    <p class="kicker">04 &middot; Joining CamDX</p>
+    <h2 class="h2">They issue our identity. We build everything around it.</h2>
+    <div class="split split--wide">
+      <div class="rail-col" data-tone="brass">
+        <p class="rail-col__tag">Only CamDX can give us</p>
+        <ul class="list" data-tone="brass">
+          <li>A <b>member name, class and code</b> — our legal identity on the network</li>
+          <li>Signed certificates for our Security Server</li>
+          <li>CamDigiKey <b>client credentials and keystores</b></li>
+          <li>Approval to register and go live</li>
+        </ul>
+      </div>
+      <div class="rail-col" data-tone="patina">
+        <p class="rail-col__tag">What we control</p>
+        <ul class="list" data-tone="patina">
+          <li>Submitting the application — <b>week one</b>, and it needs a CamDigiKey account first</li>
+          <li>Standing up and rehearsing the Security Server</li>
+          <li>Building the whole integration against public documentation</li>
+          <li>Everything that does not touch government data</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout">
+      <p class="h3">The one question we must ask this week</p>
+      <p class="body">Members today are mostly ministries and banks. <b class="text-1">Which member
+        class would we fall into?</b> If the answer is a queue, we wait and keep building. If it is
+        an eligibility bar, we need a government sponsor — and that changes the company's plan, not
+        just the project's.</p>
+    </div>
+  </section>
+
+  <!-- 6 ─────────────────────────────── THE SECURITY SERVER -->
+  <section class="slide" aria-label="Slide 6">
+    <p class="kicker">05 &middot; What running the gateway means</p>
+    <h2 class="h2">Small machine. Serious responsibility.</h2>
+    <div class="stats">
+      <div class="stat" data-tone="brass">
+        <p class="stat__v">Two</p>
+        <p class="stat__l">gateways in production, so one machine failing does not cut us off from
+          the government entirely.</p>
+      </div>
+      <div class="stat">
+        <p class="stat__v">2 / 4 / 100</p>
+        <p class="stat__l">cores, GB memory, GB disk. Ubuntu LTS. Modest hardware, published
+          install guides, ready-made automation scripts.</p>
+      </div>
+      <div class="stat" data-tone="oxide">
+        <p class="stat__v">Weeks</p>
+        <p class="stat__l">to recover if we lose the keys — a paperwork process, not a technical
+          one. They get escrowed on day one.</p>
+      </div>
+    </div>
+    <p class="body">It runs on its own isolated host with no application code on it, and its admin
+      panel never faces the internet. This is the machine that proves AttaID is AttaID to the
+      government, so it is treated like a vault, not like a server.</p>
+  </section>
+
+  <!-- 7 ─────────────────────────────── WHAT CAMDIGIKEY GIVES US -->
+  <section class="slide" aria-label="Slide 7">
+    <p class="kicker">06 &middot; CamDigiKey</p>
+    <h2 class="h2">Someone else does the hard identity check. We carry the result.</h2>
+    <div class="split split--wide">
+      <div>
+        <ul class="list" data-tone="steel" style="gap:1.6cqh">
+          <li><b>Reads the national ID card</b> and extracts the details</li>
+          <li><b>Matches the face</b> against the document photo</li>
+          <li><b>Proves the person is live</b>, not a photo of a photo</li>
+        </ul>
+        <p class="body" style="margin-top:2.4cqh">That process is called KYC — <i>know your
+          customer</i> — and it is a legal requirement for anything touching money. It is expensive
+          and it carries liability.</p>
+      </div>
+      <div class="callout" data-tone="brass">
+        <p class="h3">The commercial argument, in one line</p>
+        <p class="body">Verify a person once. Every app we serve consumes the result — with proof
+          of where it came from — instead of paying to do their own checks and storing sensitive
+          documents they would rather not hold.</p>
+        <p class="small">We store the outcome and never the evidence: no ID numbers, no face
+          images, no document scans.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 ─────────────────────────────── THE FLOW -->
+  <section class="slide" aria-label="Slide 8">
+    <p class="kicker">07 &middot; How a CamDigiKey sign-in works</p>
+    <h2 class="h2">The user scans a QR code. Everything else is ours to build.</h2>
+    <div class="flow">
+      <div class="flow__step">
+        <span class="flow__n">01</span>
+        <p class="flow__t">We request a login token</p>
+        <p class="flow__d">AttaID asks CamDigiKey to start a session and gets back a one-time code.</p>
+      </div>
+      <div class="flow__step" data-key="true">
+        <span class="flow__n">02</span>
+        <p class="flow__t">We show a QR code</p>
+        <p class="flow__d">The only part the citizen ever sees. They scan it with the government app.</p>
+      </div>
+      <div class="flow__step" data-key="true">
+        <span class="flow__n">03</span>
+        <p class="flow__t">They confirm with their face</p>
+        <p class="flow__d">CamDigiKey checks the person and approves the request on their phone.</p>
+      </div>
+      <div class="flow__step">
+        <span class="flow__n">04</span>
+        <p class="flow__t">We exchange it for a token</p>
+        <p class="flow__d">Proof that a verified person just authorised us — signed, and only for us.</p>
+      </div>
+      <div class="flow__step">
+        <span class="flow__n">05</span>
+        <p class="flow__t">We record the result</p>
+        <p class="flow__d">The account is marked strongly verified, with an expiry date. No documents kept.</p>
+      </div>
+    </div>
+    <p class="small">Nine published operations in total — sign-in, token refresh, sign-out, profile
+      lookup and organisation accounts among them. We wrap the government's own library rather than
+      writing any of this ourselves.</p>
+  </section>
+
+  <!-- 9 ─────────────────────────────── THE CORRECTION -->
+  <section class="slide" aria-label="Slide 9">
+    <p class="kicker">08 &middot; One architecture decision to take now</p>
+    <h2 class="h2">CamDigiKey does not plug into Keycloak.</h2>
+    <div class="split">
+      <div class="rail-col" data-tone="brass">
+        <p class="rail-col__tag">What we assumed</p>
+        <p class="body">That Keycloak — the off-the-shelf engine underneath AttaID — could talk to
+          CamDigiKey with configuration alone, the way it talks to Google.</p>
+      </div>
+      <div class="rail-col" data-tone="patina">
+        <p class="rail-col__tag">What is actually true</p>
+        <p class="body">CamDigiKey uses its own security scheme, not the industry standard one.
+          Keycloak cannot speak it. The government publishes a library that can — and it is written
+          in the same language our platform already uses.</p>
+      </div>
+    </div>
+    <div class="callout" data-tone="brass">
+      <p class="h3">So we build it in our own application layer, and use the government's library.</p>
+      <p class="body">Caught now, this is a diagram change. Caught in month seven, it is a rewrite
+        in a language nobody on the team writes. It is the single most valuable thing this review
+        turned up.</p>
+    </div>
+  </section>
+
+  <!-- 10 ─────────────────────────────── PUBLIC VS GATED -->
+  <section class="slide" aria-label="Slide 10">
+    <p class="kicker">09 &middot; Why we do not have to wait</p>
+    <h2 class="h2">The government publishes almost everything except the keys.</h2>
+    <div class="split">
+      <div class="rail-col" data-tone="patina">
+        <p class="rail-col__tag">Public today</p>
+        <ul class="list" data-tone="patina">
+          <li>The full CamDigiKey specification and a working client library</li>
+          <li>Security Server install guides and automation scripts</li>
+          <li>The verification API documentation, including a test environment</li>
+        </ul>
+      </div>
+      <div class="rail-col" data-tone="brass">
+        <p class="rail-col__tag">Gated behind membership</p>
+        <ul class="list" data-tone="brass">
+          <li>Our credentials and certificates</li>
+          <li>Our member identity on the network</li>
+          <li>Permission to go live</li>
+        </ul>
+      </div>
+    </div>
+    <div class="callout" data-tone="brass">
+      <p class="h3">We build and test the whole integration now, against a stand-in.</p>
+      <p class="body">When the credentials arrive we swap them in. That turns the government
+        integration from a three-month project that <i>starts</i> after approval into a
+        two-to-four-week finish — which is the difference between an answer and an excuse when
+        someone asks how soon we can go live.</p>
+    </div>
+  </section>
+
+  <!-- 11 ─────────────────────────────── TIMELINE -->
+  <section class="slide" aria-label="Slide 11">
+    <p class="kicker">10 &middot; The shape of the next eight months</p>
+    <h2 class="h2">Two tracks. Only one of them is ours to schedule.</h2>
+    <div class="tl">
+      <div class="tl__months">
+        <span></span><span>M1</span><span>M2</span><span>M3</span><span>M4</span>
+        <span>M5</span><span>M6</span><span>M7</span><span>M8</span><span>M9+</span>
+      </div>
+      <div class="tl__group" data-tone="brass">
+        <div class="tl__row">
+          <span class="tl__name">Government</span>
+          <span class="tl__bar tl__bar--endless" style="--from:2; --to:11;">CamDX membership — apply week 1, then pursue</span>
+        </div>
+        <div class="tl__row">
+          <span></span>
+          <span class="tl__bar" style="--from:2; --to:4;">Which member class?</span>
+          <span class="tl__bar" style="--from:4; --to:8;">Legal basis &amp; data agreements</span>
+        </div>
+      </div>
+      <div class="tl__group">
+        <div class="tl__row">
+          <span class="tl__name">Build</span>
+          <span class="tl__bar" style="--from:2; --to:3;">Decide</span>
+          <span class="tl__bar" style="--from:3; --to:6;">First real integration</span>
+          <span class="tl__bar" style="--from:6; --to:8;">Open it to others</span>
+          <span class="tl__bar" style="--from:8; --to:10;">Pilot-ready</span>
+        </div>
+        <div class="tl__row">
+          <span></span>
+          <span class="tl__bar tl__bar--ghost" style="--from:3; --to:8;">CamDigiKey integration built &amp; tested against a stand-in</span>
+          <span class="tl__bar tl__bar--gated" style="--from:10; --to:11;">Swap in credentials</span>
+        </div>
+      </div>
+    </div>
+    <p class="small">The top bar has no end because we do not control it. Everything below it is
+      designed so that waiting costs us nothing.</p>
+  </section>
+
+  <!-- 12 ─────────────────────────────── RISKS -->
+  <section class="slide" aria-label="Slide 12">
+    <p class="kicker">11 &middot; What could go wrong</p>
+    <h2 class="h2">Three risks worth your attention.</h2>
+    <table class="tbl">
+      <thead><tr><th>Risk</th><th>Why it matters</th><th>What we do about it</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="hl-oxide">Membership refused</td>
+          <td>No government verification, and the defensible part of the business goes with it.</td>
+          <td>Ask about member class this week. If a sponsor is needed, find that out in month one, not month six.</td>
+        </tr>
+        <tr>
+          <td class="hl-brass">Nobody outside integrates</td>
+          <td>Farms Nexus and CashEW are ours. Proving we can connect to ourselves is not proof of a market.</td>
+          <td>Name one target outside the company now — and build for them from day one: our own apps connect through the same public interface a stranger would, with no shortcuts.</td>
+        </tr>
+        <tr>
+          <td class="hl-brass">Apps depend on us with no way out</td>
+          <td>We ask apps to delete their own identity data. If AttaID stops, their logins stop — including ours.</td>
+          <td>Write the exit terms before the first outside integration, not during the negotiation.</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="small">Ten further engineering findings — account takeover, data correlation, recovery
+      — are documented separately and are all fixable inside the plan above.</p>
+  </section>
+
+  <!-- 13 ─────────────────────────────── THE ASK -->
+  <section class="slide" aria-label="Slide 13">
+    <p class="kicker">12 &middot; What I need from you</p>
+    <h2 class="h2">Four decisions. All of them yours to make.</h2>
+    <div class="grid4">
+      <article class="card card--tint" data-tone="brass">
+        <p class="card__n">1</p>
+        <p class="h3">Authorise the CamDX application</p>
+        <p class="small">And name who owns chasing it. It is a relationship and a queue, not a
+          ticket, and it is the longest lead time we have.</p>
+      </article>
+      <article class="card card--tint" data-tone="brass">
+        <p class="card__n">2</p>
+        <p class="h3">Farms Nexus drops its own farmer records</p>
+        <p class="small">It reads them from AttaID instead. Ours to decide, and it is what makes
+          the first milestone real rather than a demo.</p>
+      </article>
+      <article class="card card--tint" data-tone="brass">
+        <p class="card__n">3</p>
+        <p class="h3">CashEW consumes one verified detail</p>
+        <p class="small">Rather than collecting it. Without this we are a login button, which is
+          the outcome worth avoiding.</p>
+      </article>
+      <article class="card card--tint" data-tone="brass">
+        <p class="card__n">4</p>
+        <p class="h3">Half a day for the architecture decisions</p>
+        <p class="small">Nine choices that are an afternoon now and months of rework later.</p>
+      </article>
+    </div>
+    <div class="callout">
+      <p class="body"><b class="text-1">And one question I cannot answer for you:</b> who is the
+        first organisation outside this company that we want using AttaID? If we can name them,
+        the plan has a target. If we cannot, that is the most useful thing to come out of this
+        meeting.</p>
+    </div>
+  </section>
+
+  <!-- 14 ─────────────────────────────── CLOSE -->
+  <section class="slide s-title" aria-label="Slide 14">
+    <p class="kicker">The whole plan, in one line</p>
+    <h1 class="h1" style="font-size:5.2cqw; max-width:22ch; text-align:left">Be holding a finished
+      integration on the day the government opens the door.</h1>
+    <div class="rule"></div>
+    <p class="lead">Everything else we ship while it is opening.</p>
+    <p class="sub"><a href="plan.html" style="color:var(--steel)">Full delivery plan &amp; engineering detail →</a></p>
+  </section>
+
+  <div class="chrome">
+    <span class="chrome__id">AttaID · CamDX &amp; CamDigiKey</span>
+    <nav class="nav" aria-label="Slide navigation">
+      <span class="chrome__n"><span id="cur">1</span> / <span id="tot">14</span></span>
+      <button id="prev" type="button" aria-label="Previous slide">‹</button>
+      <button id="next" type="button" aria-label="Next slide">›</button>
+    </nav>
+  </div>
+  <div class="progress" id="progress"></div>
+
+</div>
+</div>
+
+<script src="deck.js"></script>
+</body>
+</html>
